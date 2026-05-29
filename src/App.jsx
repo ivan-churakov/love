@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const marsPhotos = [
-  { src: '/assets/mars-1.jpg', cap: 'главный соучастник' },
+  { src: `${import.meta.env.BASE_URL}assets/mars-1.jpg`, cap: 'главный соучастник' },
 ]
 
 const TAUNTS = [
