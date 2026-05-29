@@ -188,7 +188,9 @@ export default function App() {
 
   function burst() {
     const colors = ['#f7c948', '#ffe7a3', '#f3a7bb', '#cdb8ee', '#fffbe9']
-    for (let i = 0; i < 60; i++) {
+    const count = window.innerWidth < 600 ? 28 : 60
+
+    function spawnOne(i) {
       const l = document.createElement('div')
       l.className = 'lantern confetti-lantern ' + (Math.random() > .5 ? 'small' : 'tiny')
       l.innerHTML = '<div class="body"></div>'
@@ -197,14 +199,24 @@ export default function App() {
       body.style.background = `radial-gradient(60% 55% at 50% 62%, #fff, ${col} 60%, ${col})`
       body.style.boxShadow = `0 0 20px ${col}`
       l.style.left = Math.random() * 100 + 'vw'
+      l.style.willChange = 'transform, opacity'
       const dur = 4 + Math.random() * 4
       l.style.transition = `transform ${dur}s cubic-bezier(.3,.7,.5,1), opacity ${dur}s ease`
       document.body.appendChild(l)
       requestAnimationFrame(() => {
-        l.style.transform = `translateY(-${100 + Math.random() * 30}vh) translateX(${Math.random() * 200 - 100}px) rotate(${Math.random() * 40 - 20}deg)`
+        const tx = (Math.random() * 200 - 100).toFixed(1)
+        const ty = (100 + Math.random() * 30).toFixed(1)
+        const rot = (Math.random() * 40 - 20).toFixed(1)
+        l.style.transform = `translate3d(${tx}px, -${ty}vh, 0) rotate(${rot}deg)`
         l.style.opacity = '0'
       })
       setTimeout(() => l.remove(), dur * 1000 + 400)
+    }
+
+    // spawn in small batches to spread GPU load across frames
+    const batchSize = 6
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => spawnOne(i), Math.floor(i / batchSize) * 32)
     }
   }
 
