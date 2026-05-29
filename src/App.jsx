@@ -231,7 +231,7 @@ export default function App() {
         <div className="wrap">
           <div className="divider reveal"><div className="braid" /><div className="flower" /></div>
           <h2 className="script reveal" style={{ marginBottom: '6px' }}>маленькое письмо</h2>
-          <p className="lead muted reveal" style={{ marginBottom: '26px' }}>для самой моей зайки и ягодки</p>
+          <p className="lead muted reveal" style={{ marginBottom: '26px' }}>для моей зайки и ягодки</p>
           <div className="card-scene reveal">
             <div className={`card${cardOpen ? ' open' : ''}`} onClick={() => setCardOpen(o => !o)}>
               <div className="card-cover">
