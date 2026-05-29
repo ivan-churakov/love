@@ -249,14 +249,16 @@ h2.script { font-size: clamp(46px, 9vw, 92px); }
   transition: transform .9s cubic-bezier(.7,.05,.2,1);
   transform: rotateY(0deg); z-index: 2;
   padding: 30px;
+  transform-origin: left center;
 }
-.card.open .card-cover { transform: rotateY(-162deg); }
+.card.open .card-cover { transform: rotateY(-160deg); }
 .card-inside {
   background:
     radial-gradient(130% 120% at 50% 0%, #fffaf0, var(--cream) 55%, var(--cream-2) 100%);
   color: var(--ink);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
   padding: 34px 30px; border: 1px solid var(--gold-deep);
+  backface-visibility: visible;
 }
 .card-seal {
   width: 64px; height: 64px; border-radius: 50%;
