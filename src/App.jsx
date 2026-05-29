@@ -25,6 +25,7 @@ export default function App() {
   const ambientRef = useRef(null)
   const stageRef = useRef(null)
   const noRef = useRef(null)
+  const yesRef = useRef(null)
   const noTauntI = useRef(0)
   const noDodges = useRef(0)
   const lanternDelays = useRef(
@@ -147,6 +148,7 @@ export default function App() {
   const flee = useCallback(() => {
     const stage = stageRef.current
     const no = noRef.current
+    const yes = yesRef.current
     if (!stage || !no) return
     noDodges.current++
     const sb = stage.getBoundingClientRect()
@@ -154,8 +156,30 @@ export default function App() {
     const h = no.offsetHeight
     const maxX = Math.max(10, sb.width - w - 10)
     const maxY = Math.max(10, sb.height - h - 10)
-    const x = Math.random() * maxX
-    const y = Math.random() * maxY
+
+    let yesBounds = null
+    if (yes) {
+      const yb = yes.getBoundingClientRect()
+      const pad = 14
+      yesBounds = {
+        left: yb.left - sb.left - pad,
+        right: yb.right - sb.left + pad,
+        top: yb.top - sb.top - pad,
+        bottom: yb.bottom - sb.top + pad,
+      }
+    }
+
+    let x, y, attempts = 0
+    do {
+      x = Math.random() * maxX
+      y = Math.random() * maxY
+      attempts++
+      if (!yesBounds) break
+      const overlaps = x < yesBounds.right && x + w > yesBounds.left &&
+                       y < yesBounds.bottom && y + h > yesBounds.top
+      if (!overlaps) break
+    } while (attempts < 20)
+
     const scale = Math.max(0.55, 1 - noDodges.current * 0.06)
     setNoStyle({ left: x + 'px', top: y + 'px', transform: 'none', fontSize: (18 * scale).toFixed(1) + 'px' })
     setNoText(TAUNTS[noTauntI.current % TAUNTS.length])
@@ -298,7 +322,7 @@ export default function App() {
             <>
               <div className="rsvp-q">ну что, ты со мной?</div>
               <div className="rsvp-stage" ref={stageRef}>
-                <button className="btn btn-yes" onClick={handleYes}>Да! ✨</button>
+                <button className="btn btn-yes" ref={yesRef} onClick={handleYes}>Да! ✨</button>
                 <button
                   className="btn btn-no"
                   ref={noRef}
